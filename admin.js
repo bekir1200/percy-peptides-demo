@@ -2,7 +2,8 @@ const STORAGE = {
   products: "percy-products",
   orders: "percy-orders",
   content: "percy-site-content",
-  customerNotes: "percy-customer-notes"
+  customerNotes: "percy-customer-notes",
+  enquirySettings: "percy-enquiry-settings"
 };
 
 const defaultProducts = [
@@ -36,6 +37,7 @@ let products = readJSON(STORAGE.products, defaultProducts);
 let orders = readJSON(STORAGE.orders, []);
 let content = readJSON(STORAGE.content, defaultContent);
 let customerNotes = readJSON(STORAGE.customerNotes, {});
+let enquirySettings = readJSON(STORAGE.enquirySettings, { recipientEmail: "", contactPhone: "" });
 let toastTimer;
 
 if (content.pageTitle === "Percy Peptides | Research Compounds and Product Information") {
@@ -146,6 +148,12 @@ function renderContent() {
 }
 
 function renderStorageSummary() {
+  const settingsForm = document.querySelector("#enquiry-settings-form");
+  if (settingsForm) {
+    settingsForm.elements.recipientEmail.value = enquirySettings.recipientEmail || "";
+    settingsForm.elements.contactPhone.value = enquirySettings.contactPhone || "";
+    document.querySelector("#enquiry-settings-status").textContent = enquirySettings.recipientEmail ? "Saved in this browser. Email draft routing is active here." : "Saved in this browser only.";
+  }
   const customers = customerList();
   document.querySelector("#storage-summary").innerHTML = [[products.length, "Products"], [orders.length, "Enquiries"], [customers.length, "Customers"], [(content.articles || []).length, "Research articles"]].map(([count, label]) => `<div class="storage-item"><strong>${count}</strong><span>${label}</span></div>`).join("");
 }
@@ -232,8 +240,17 @@ document.querySelector("#content-form").addEventListener("submit", event => {
 });
 document.querySelector("#save-content-top").addEventListener("click", () => document.querySelector("#content-form").requestSubmit());
 
+document.querySelector("#enquiry-settings-form").addEventListener("submit", event => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  enquirySettings = { recipientEmail: String(form.elements.recipientEmail.value).trim(), contactPhone: String(form.elements.contactPhone.value).trim() };
+  writeJSON(STORAGE.enquirySettings, enquirySettings);
+  document.querySelector("#enquiry-settings-status").textContent = "Saved in this browser. The website preview will use this inbox here.";
+  showToast("Enquiry contact saved in this browser.");
+});
+
 document.querySelector("#export-data").addEventListener("click", () => {
-  const backup = { schemaVersion: 1, exportedAt: new Date().toISOString(), products, orders, content, customerNotes };
+  const backup = { schemaVersion: 1, exportedAt: new Date().toISOString(), products, orders, content, customerNotes, enquirySettings };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -247,8 +264,8 @@ document.querySelector("#import-data").addEventListener("change", async event =>
     const backup = JSON.parse(await file.text());
     if (backup.schemaVersion !== 1 || !Array.isArray(backup.products) || !Array.isArray(backup.orders) || !backup.content || typeof backup.customerNotes !== "object") throw new Error("This file is not a supported Percy workspace backup.");
     if (!window.confirm("Replace the local Percy workspace data with this backup? Export the current data first if you may need it later.")) { event.target.value = ""; return; }
-    products = backup.products; orders = backup.orders; content = backup.content; customerNotes = backup.customerNotes;
-    writeJSON(STORAGE.products, products); writeJSON(STORAGE.orders, orders); writeJSON(STORAGE.content, content); writeJSON(STORAGE.customerNotes, customerNotes);
+    products = backup.products; orders = backup.orders; content = backup.content; customerNotes = backup.customerNotes; enquirySettings = backup.enquirySettings || { recipientEmail: "", contactPhone: "" };
+    writeJSON(STORAGE.products, products); writeJSON(STORAGE.orders, orders); writeJSON(STORAGE.content, content); writeJSON(STORAGE.customerNotes, customerNotes); writeJSON(STORAGE.enquirySettings, enquirySettings);
     renderDashboard(); renderStorageSummary(); showToast("Backup restored to this browser.");
   } catch (error) { showToast(error.message || "Could not read that backup file."); }
   event.target.value = "";

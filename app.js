@@ -70,6 +70,16 @@ function applySiteContent() {
   } catch { /* Ignore malformed local preview content. */ }
 }
 
+function applyEnquiryContact() {
+  try {
+    const settings = JSON.parse(localStorage.getItem("percy-enquiry-settings") || "null");
+    const email = String(settings?.recipientEmail || "").trim();
+    const phone = String(settings?.contactPhone || "").trim();
+    const contact = document.querySelector(".contact-card__link");
+    if (email && contact) contact.outerHTML = `<span class="contact-card__link"><a href="mailto:${encodeURIComponent(email)}">${escapeHTML(email)} <b aria-hidden="true">↗</b></a>${phone ? `<br/><a href="tel:${encodeURIComponent(phone)}">${escapeHTML(phone)}</a>` : ""}</span>`;
+  } catch { /* Keep the default contact placeholder if local settings are unavailable. */ }
+}
+
 const productGrid = document.querySelector("#product-grid");
 const searchInput = document.querySelector("#product-search");
 const filterButtons = [...document.querySelectorAll(".filter-chip")];
@@ -219,11 +229,21 @@ enquiryDialog.querySelector("form").addEventListener("submit", event => {
     const orders = JSON.parse(localStorage.getItem("percy-orders") || "[]");
     orders.unshift(enquiry);
     localStorage.setItem("percy-orders", JSON.stringify(orders));
+    const routing = JSON.parse(localStorage.getItem("percy-enquiry-settings") || "null");
+    const recipient = String(routing?.recipientEmail || "").trim();
+    const selectedItems = enquiry.items.map(item => `${item.name} × ${item.quantity}`).join("\n");
+    const emailBody = [`Enquiry reference: ${enquiry.id}`, `Name: ${enquiry.customer.name}`, `Email: ${enquiry.customer.email}`, `Organisation: ${enquiry.customer.organisation || "—"}`, `Phone: ${enquiry.customer.phone || "—"}`, "", "Selection:", selectedItems, "", "Message:", enquiry.message || "—"].join("\n");
     cart = [];
     saveCart(); renderCart();
     enquiryDialog.hidden = true;
     event.currentTarget.reset();
-    showToast("Your enquiry has been saved in this browser.");
+    if (recipient) {
+      const subject = `Percy Peptides enquiry ${enquiry.id}`;
+      window.location.href = `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+      showToast("Enquiry saved. Review and send the prepared email in your mail app.");
+    } else {
+      showToast("Enquiry saved in this browser only. Add an inbox in CRM settings to prepare an email.");
+    }
   } catch {
     showToast("This browser could not save the enquiry. Please try again.");
   }
@@ -258,3 +278,4 @@ document.addEventListener("keydown", event => {
 renderProducts();
 renderCart();
 applySiteContent();
+applyEnquiryContact();

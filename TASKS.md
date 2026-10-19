@@ -81,6 +81,7 @@ These items were discussed after the original proposal and need a client decisio
 - [x] Add a local admin workspace for product catalogue, enquiries, customer notes, homepage copy, SEO fields, and research articles.
 - [x] Connect admin changes to the website preview using this browser's local storage.
 - [x] Add JSON export and restore for the local workspace data.
+- [x] Add local CRM fields for the enquiry inbox and optional phone; prepare a prefilled email draft from the website preview in the same browser.
 - [ ] Connect the CRM to an authenticated server and shared database before using it with real customers or staff.
 - [ ] Connect enquiry submission to a verified business inbox/order process before accepting customer enquiries.
 
