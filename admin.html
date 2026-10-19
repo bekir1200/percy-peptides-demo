@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f2ed" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Percy Peptides — Local Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="admin.js" defer></script>
+  </head>
+  <body>
+    <div class="admin-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="admin-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>PERCY <b>STUDIO</b></span></a>
+        <div class="workspace-label">WORKSPACE</div>
+        <nav class="side-nav" aria-label="Admin navigation">
+          <button class="nav-item is-active" type="button" data-page="dashboard"><span class="nav-icon">OV</span>Overview</button>
+          <button class="nav-item" type="button" data-page="orders"><span class="nav-icon">EN</span>Enquiries <span class="nav-badge" id="new-orders-count">0</span></button>
+          <button class="nav-item" type="button" data-page="customers"><span class="nav-icon">CU</span>Customers</button>
+          <button class="nav-item" type="button" data-page="products"><span class="nav-icon">PR</span>Products</button>
+          <button class="nav-item" type="button" data-page="content"><span class="nav-icon">CT</span>Website content</button>
+          <button class="nav-item" type="button" data-page="settings"><span class="nav-icon">ST</span>Settings &amp; backup</button>
+        </nav>
+        <div class="sidebar-bottom"><div class="local-status"><span></span><div><strong>Local workspace</strong><small>Saved in this browser</small></div></div><a href="index.html" class="view-site-link">View website <span aria-hidden="true">↗</span></a></div>
+      </aside>
+
+      <main class="admin-main">
+        <header class="topbar"><button class="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded="false">Menu</button><div class="breadcrumbs"><span>Percy Peptides</span><span>/</span><strong id="page-title">Overview</strong></div><div class="topbar-right"><span class="local-pill"><i></i> LOCAL PREVIEW</span><span class="avatar">PP</span></div></header>
+        <div class="local-notice"><strong>Local prototype</strong><span>Changes are stored in this browser only. There is no login, shared database, email sending, or payment processing. Export a backup before clearing browser data.</span></div>
+
+        <section class="page-view is-visible" id="page-dashboard" data-view="dashboard">
+          <div class="page-heading"><div><p class="eyebrow">LOCAL WORKSPACE</p><h1>Good afternoon.</h1><p>Here’s what’s happening in your Percy workspace.</p></div><button class="button button-primary" type="button" data-goto="products">Add a product <span>+</span></button></div>
+          <div class="stats-grid"><article class="stat-card"><span class="stat-label">Open enquiries</span><strong id="stat-open">0</strong><small>Waiting for a response</small><span class="stat-symbol">↗</span></article><article class="stat-card"><span class="stat-label">Total enquiries</span><strong id="stat-total">0</strong><small>All time in this browser</small><span class="stat-symbol">▤</span></article><article class="stat-card"><span class="stat-label">Active products</span><strong id="stat-products">0</strong><small>Visible in the catalogue</small><span class="stat-symbol">◫</span></article><article class="stat-card stat-card--accent"><span class="stat-label">Customers</span><strong id="stat-customers">0</strong><small>Unique enquiry contacts</small><span class="stat-symbol">◉</span></article></div>
+          <div class="dashboard-grid"><section class="panel"><div class="panel-heading"><div><p class="eyebrow">INBOX</p><h2>Recent enquiries</h2></div><button class="text-button" type="button" data-goto="orders">View all <span>→</span></button></div><div id="recent-orders" class="table-wrap"></div></section><section class="panel quick-panel"><div class="panel-heading"><div><p class="eyebrow">SHORTCUTS</p><h2>Quick actions</h2></div></div><button class="quick-action" type="button" data-goto="products"><span class="quick-icon">＋</span><span><strong>Add a product</strong><small>Update the research catalogue</small></span><b>→</b></button><button class="quick-action" type="button" data-goto="content"><span class="quick-icon">✎</span><span><strong>Edit website copy</strong><small>Homepage and article content</small></span><b>→</b></button><button class="quick-action" type="button" data-goto="settings"><span class="quick-icon">⇧</span><span><strong>Back up your data</strong><small>Export a copy of this workspace</small></span><b>→</b></button></section></div>
+        </section>
+
+        <section class="page-view" id="page-orders" data-view="orders">
+          <div class="page-heading"><div><p class="eyebrow">CUSTOMER RELATIONSHIPS</p><h1>Enquiries</h1><p>Product enquiries saved from this browser’s website preview.</p></div><label class="select-label">Status<select id="order-filter"><option value="all">All enquiries</option><option value="new">New</option><option value="reviewing">Reviewing</option><option value="confirmed">Confirmed</option><option value="fulfilled">Completed</option><option value="cancelled">Cancelled</option></select></label></div>
+          <section class="panel"><div id="orders-table" class="table-wrap"></div></section>
+        </section>
+
+        <section class="page-view" id="page-customers" data-view="customers">
+          <div class="page-heading"><div><p class="eyebrow">CONTACTS</p><h1>Customers</h1><p>Contacts are grouped by email address from saved enquiries.</p></div><span class="count-chip" id="customer-count-label">0 contacts</span></div>
+          <section class="panel"><div id="customers-table" class="table-wrap"></div></section>
+        </section>
+
+        <section class="page-view" id="page-products" data-view="products">
+          <div class="page-heading"><div><p class="eyebrow">CATALOGUE MANAGEMENT</p><h1>Products</h1><p>Manage catalogue information. Changes appear on the public page in this browser.</p></div><button class="button button-primary" id="add-product" type="button">Add product <span>+</span></button></div>
+          <section class="panel"><div class="panel-heading"><div><h2>Product catalogue</h2><p class="panel-subtitle">Prices and stock are internal notes until you confirm them for publication.</p></div><span class="count-chip" id="product-count-label">0 products</span></div><div id="products-table" class="table-wrap"></div></section>
+        </section>
+
+        <section class="page-view" id="page-content" data-view="content">
+          <div class="page-heading"><div><p class="eyebrow">CONTENT MANAGEMENT</p><h1>Website content</h1><p>Edit the homepage copy and research articles shown in this local preview.</p></div><button class="button button-primary" id="save-content-top" type="button">Save changes <span>✓</span></button></div>
+          <form id="content-form" class="content-layout">
+            <section class="panel form-panel"><div class="panel-heading"><div><p class="eyebrow">HOMEPAGE</p><h2>Key sections</h2></div></div><div class="form-grid"><label>Browser title<input name="pageTitle" maxlength="65" /></label><label>Meta description<input name="metaDescription" maxlength="160" /></label><label class="span-two">Keyword plan notes (not a Google ranking tag)<input name="keywords" maxlength="240" /></label><label>Announcement bar<input name="announcement" maxlength="150" /></label><label>Hero heading, first line<input name="heroTitleLead" maxlength="80" /></label><label>Hero heading, second line<input name="heroTitleEmphasis" maxlength="80" /></label><label class="span-two">Hero introduction<textarea name="heroDescription" rows="3" maxlength="300"></textarea></label><label class="span-two">Catalogue introduction<textarea name="catalogueLead" rows="3" maxlength="400"></textarea></label><label>Enquiry contact text<input name="contactEmail" maxlength="120" /></label><label class="span-two">Footer disclaimer<textarea name="disclaimer" rows="3" maxlength="500"></textarea></label></div></section>
+            <section class="panel form-panel"><div class="panel-heading"><div><p class="eyebrow">RESEARCH LIBRARY</p><h2>Article cards</h2><p class="panel-subtitle">Edit titles and summaries shown on the homepage.</p></div></div><div id="article-editors" class="article-editors"></div></section>
+            <div class="content-actions"><span>Saved locally to this browser.</span><button class="button button-primary" type="submit">Save website content <span>✓</span></button></div>
+          </form>
+        </section>
+
+        <section class="page-view" id="page-settings" data-view="settings">
+          <div class="page-heading"><div><p class="eyebrow">WORKSPACE PREFERENCES</p><h1>Settings &amp; backup</h1><p>Export or restore local products, content, enquiries, and customer notes.</p></div></div>
+          <div class="settings-grid"><section class="panel settings-card"><div class="panel-heading"><div><p class="eyebrow">DATA SAFETY</p><h2>Backup your workspace</h2></div><span class="settings-icon">⇧</span></div><p>Download a JSON copy of your current products, enquiries, website content, and customer notes. Keep it somewhere safe.</p><button class="button button-primary" id="export-data" type="button">Download backup <span>↓</span></button></section><section class="panel settings-card"><div class="panel-heading"><div><p class="eyebrow">RESTORE</p><h2>Import a backup</h2></div><span class="settings-icon">↻</span></div><p>Restore a Percy workspace backup from a JSON file. Importing replaces the data stored in this browser.</p><label class="button button-secondary file-button">Choose backup file<input type="file" id="import-data" accept="application/json,.json" /></label></section><section class="panel settings-card settings-card--wide"><div class="panel-heading"><div><p class="eyebrow">CURRENT STORAGE</p><h2>Browser data summary</h2></div></div><div class="storage-summary" id="storage-summary"></div></section><section class="panel settings-card settings-card--wide"><div class="panel-heading"><div><p class="eyebrow">IMPORTANT</p><h2>Before this can go live</h2></div></div><p>This prototype has no user accounts or server database. Data exists only in the current browser profile. For staff access from multiple devices, production order handling, or secure customer records, connect this panel to a server, database, and authenticated admin service.</p></section></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="editor-dialog" id="product-dialog"><form id="product-form" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">CATALOGUE</p><h2 id="product-dialog-title">Add product</h2></div><button class="icon-button" value="cancel" aria-label="Close dialog">×</button></div><input type="hidden" name="originalId" /><div class="form-grid"><label>Product name<input name="name" required maxlength="80" /></label><label>Short descriptor<input name="alias" maxlength="100" /></label><label>Category<select name="category"><option value="metabolic">Metabolic research</option><option value="cellular">Cellular biology</option><option value="neuro">Neurobiology</option><option value="other">Other research</option></select></label><label>Category label<input name="categoryLabel" required maxlength="40" /></label><label>Product code<input name="code" maxlength="20" /></label><label>Published price (leave blank for enquiry)<input name="price" placeholder="Price on enquiry" maxlength="60" /></label><label class="span-two">Research description<textarea name="description" required rows="4" maxlength="500"></textarea></label><label>Availability<select name="availability"><option value="enquiry">Confirm by enquiry</option><option value="available">Available</option><option value="unavailable">Unavailable</option></select></label><label class="checkbox-label"><input name="active" type="checkbox" checked /> Show in public catalogue</label></div><div class="dialog-actions"><button class="button button-secondary" value="cancel">Cancel</button><button class="button button-primary" id="save-product" type="button">Save product</button></div></form></dialog>
+    <div class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

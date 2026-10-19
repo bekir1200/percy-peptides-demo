@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc">
+  <title id="title">Retatrutide research: three receptor targets</title>
+  <desc id="desc">An educational animation reveals GIPR, GLP-1R, and GCGR one at a time as the three receptor targets studied for retatrutide, then clarifies the limits of study findings.</desc>
+  <defs>
+    <linearGradient id="paper" x2="0" y2="1"><stop stop-color="#fbfaf7"/><stop offset="1" stop-color="#f1efe8"/></linearGradient>
+    <linearGradient id="green" x2="1" y2="1"><stop stop-color="#7e9c7c"/><stop offset="1" stop-color="#34493d"/></linearGradient>
+    <linearGradient id="clay" x2="1" y2="1"><stop stop-color="#d99978"/><stop offset="1" stop-color="#a9573e"/></linearGradient>
+    <linearGradient id="lime" x2="1" y2="1"><stop stop-color="#d6df9f"/><stop offset="1" stop-color="#95a658"/></linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#657966"/></marker>
+  </defs>
+  <style>
+    text{font-family:'DM Sans',Arial,sans-serif;fill:#202722}.display{font-family:Manrope,Arial,sans-serif;font-weight:700;letter-spacing:-2px}.label{font-size:24px;font-weight:700}.small{font-size:19px;fill:#53605a}.step{font-size:18px;font-weight:700;letter-spacing:1.8px;fill:#657966}
+    .branch{fill:none;stroke:#93a391;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.branch-one{animation:branch-one 9s ease-in-out infinite}.branch-two{animation:branch-two 9s ease-in-out infinite}.branch-three{animation:branch-three 9s ease-in-out infinite}
+    .ring{fill:none;stroke-width:6;opacity:.12}.ring-one{stroke:#657966;animation:target-one 9s ease-in-out infinite}.ring-two{stroke:#b66f52;animation:target-two 9s ease-in-out infinite}.ring-three{stroke:#95a658;animation:target-three 9s ease-in-out infinite}
+    .receptor-one{animation:target-one 9s ease-in-out infinite}.receptor-two{animation:target-two 9s ease-in-out infinite}.receptor-three{animation:target-three 9s ease-in-out infinite}
+    @keyframes branch-one{0%,8%{stroke:#93a391;stroke-width:4}14%,28%{stroke:#657966;stroke-width:8}34%,100%{stroke:#93a391;stroke-width:4}}
+    @keyframes branch-two{0%,34%{stroke:#93a391;stroke-width:4}40%,54%{stroke:#b66f52;stroke-width:8}60%,100%{stroke:#93a391;stroke-width:4}}
+    @keyframes branch-three{0%,60%{stroke:#93a391;stroke-width:4}66%,80%{stroke:#95a658;stroke-width:8}86%,100%{stroke:#93a391;stroke-width:4}}
+    @keyframes target-one{0%,8%,34%,100%{opacity:.2}14%,28%{opacity:1}}
+    @keyframes target-two{0%,34%,60%,100%{opacity:.2}40%,54%{opacity:1}}
+    @keyframes target-three{0%,60%,86%,100%{opacity:.2}66%,80%{opacity:1}}
+    @media(prefers-reduced-motion:reduce){.branch,.ring,.receptor-one,.receptor-two,.receptor-three{animation:none!important}.branch{stroke:#657966;stroke-width:5}.ring{opacity:.28}.receptor-one,.receptor-two,.receptor-three{opacity:1}}
+  </style>
+  <rect width="1080" height="1350" fill="url(#paper)"/>
+  <text x="76" y="86" class="step">PERCY PEPTIDES · RESEARCH IN CONTEXT</text>
+  <text x="76" y="172" class="display" font-size="58">Retatrutide research</text>
+  <text x="76" y="240" class="display" font-size="58">examines three targets</text>
+  <text x="78" y="290" class="small">The receptors are introduced one at a time.</text>
+
+  <g transform="translate(540 408)">
+    <circle r="70" fill="#fff" stroke="#d9dcd4" stroke-width="3"/>
+    <circle cx="-24" cy="-12" r="19" fill="#657966"/><circle cx="17" cy="-22" r="18" fill="#b66f52"/><circle cx="31" cy="17" r="18" fill="#95a658"/><circle cx="-20" cy="27" r="18" fill="#d6df9f"/>
+    <path d="m-7-11 9-6m18 20 8 4m-42 13 10-14" stroke="#34493d" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <text x="540" y="506" text-anchor="middle" class="label">Retatrutide</text>
+  <text x="540" y="538" text-anchor="middle" class="small">research context</text>
+
+  <path class="branch branch-one" d="M540 557V616H225V695" marker-end="url(#arrow)"/>
+  <path class="branch branch-two" d="M540 557V695" marker-end="url(#arrow)"/>
+  <path class="branch branch-three" d="M540 557V616H855V695" marker-end="url(#arrow)"/>
+
+  <g transform="translate(225 820)">
+    <circle r="119" fill="#e8ede3"/>
+    <circle class="ring ring-one" r="137"/>
+    <g class="receptor-one">
+      <rect x="-102" y="-22" width="204" height="44" rx="22" fill="#cbd6c6"/>
+      <path d="M-34-91c-23 11-15 29-10 43 5 14-9 22-4 39 5 17 28 22 36 6 6-13 0-26 9-36 9-10 27-17 20-37-5-15-18-21-28-14-9 6-9 15-16 16-7 1-8-13-14-17Z" fill="url(#green)" stroke="#34493d" stroke-width="6"/>
+    </g>
+    <text y="169" text-anchor="middle" class="display" font-size="43">GIPR</text>
+    <text y="204" text-anchor="middle" class="small">GIP receptor</text>
+  </g>
+  <g transform="translate(540 820)">
+    <circle r="119" fill="#f3e8e1"/>
+    <circle class="ring ring-two" r="137"/>
+    <g class="receptor-two">
+      <rect x="-102" y="-22" width="204" height="44" rx="22" fill="#e8d6ca"/>
+      <path d="M-34-91c-23 11-15 29-10 43 5 14-9 22-4 39 5 17 28 22 36 6 6-13 0-26 9-36 9-10 27-17 20-37-5-15-18-21-28-14-9 6-9 15-16 16-7 1-8-13-14-17Z" fill="url(#clay)" stroke="#934d3b" stroke-width="6"/>
+    </g>
+    <text y="169" text-anchor="middle" class="display" font-size="43">GLP-1R</text>
+    <text y="204" text-anchor="middle" class="small">GLP-1 receptor</text>
+  </g>
+  <g transform="translate(855 820)">
+    <circle r="119" fill="#eff0df"/>
+    <circle class="ring ring-three" r="137"/>
+    <g class="receptor-three">
+      <rect x="-102" y="-22" width="204" height="44" rx="22" fill="#dce2bd"/>
+      <path d="M-34-91c-23 11-15 29-10 43 5 14-9 22-4 39 5 17 28 22 36 6 6-13 0-26 9-36 9-10 27-17 20-37-5-15-18-21-28-14-9 6-9 15-16 16-7 1-8-13-14-17Z" fill="url(#lime)" stroke="#728342" stroke-width="6"/>
+    </g>
+    <text y="169" text-anchor="middle" class="display" font-size="43">GCGR</text>
+    <text y="204" text-anchor="middle" class="small">Glucagon receptor</text>
+  </g>
+
+  <rect x="78" y="1108" width="924" height="153" rx="18" fill="#e8ede3"/>
+  <text x="112" y="1160" class="step">INTERPRETING STUDY FINDINGS</text>
+  <text x="112" y="1203" class="label" font-size="22">Findings apply to the tested formulation and conditions.</text>
+  <text x="78" y="1305" class="small" font-size="18">Receptor activity alone does not establish a treatment outcome.</text>
+</svg>

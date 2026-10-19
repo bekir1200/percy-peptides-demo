@@ -1,11 +1,74 @@
-const products = [
-  { id: "retatrutide", name: "Retatrutide", alias: "Triple receptor agonist research", code: "PP–01", category: "metabolic", categoryLabel: "METABOLIC RESEARCH", tone: "rose", description: "Investigated as a model for GLP-1, GIP, and glucagon receptor signalling, energy homeostasis, and receptor cross-talk." },
-  { id: "ghk-cu", name: "GHK-Cu", alias: "Copper-binding tripeptide", code: "PP–02", category: "cellular", categoryLabel: "CELLULAR BIOLOGY", tone: "sage", description: "Studied in relation to copper transport, collagen biology, fibroblast activity, and cellular communication." },
-  { id: "bpc-157", name: "BPC-157", alias: "Synthetic peptide research", code: "PP–03", category: "cellular", categoryLabel: "CELLULAR BIOLOGY", tone: "blue", description: "Investigated in preclinical research on tissue biology, vascular signalling, and cellular repair mechanisms." },
-  { id: "cjc-ipamorelin", name: "CJC-1295 + Ipamorelin", alias: "Complementary peptide research", code: "PP–04", category: "metabolic", categoryLabel: "ENDOCRINE RESEARCH", tone: "ochre", description: "Research models for GHRH and ghrelin receptor signalling, endocrine regulation, and downstream pathways." },
-  { id: "semax-selank", name: "Semax + Selank", alias: "Neurobiological research", code: "PP–05", category: "neuro", categoryLabel: "NEUROBIOLOGY", tone: "lilac", description: "Studied in relation to neurotrophic factors, neurotransmitter systems, and central nervous system signalling." },
-  { id: "mots-c", name: "MOTS-c", alias: "Mitochondrial-derived peptide", code: "PP–06", category: "metabolic", categoryLabel: "METABOLIC RESEARCH", tone: "mint", description: "Investigated for its possible role in mitochondrial communication, cellular energy sensing, and metabolic signalling." }
+const defaultProducts = [
+  { id: "retatrutide", name: "Retatrutide", alias: "Triple receptor agonist research", code: "PP–01", category: "metabolic", categoryLabel: "METABOLIC RESEARCH", tone: "rose", description: "Studied for activity involving GIP, GLP-1, and glucagon receptors. Research explores endocrine signalling and energy homeostasis. Investigational findings are specific to the formulation and trial conditions reported." },
+  { id: "ghk-cu", name: "GHK-Cu", alias: "Copper-binding tripeptide", code: "PP–02", category: "cellular", categoryLabel: "CELLULAR BIOLOGY", tone: "sage", description: "A copper complex of the tripeptide GHK. Scientific literature examines copper binding, extracellular-matrix biology, and cellular signalling across experimental models." },
+  { id: "bpc-157", name: "BPC-157", alias: "Synthetic peptide research", code: "PP–03", category: "cellular", categoryLabel: "CELLULAR BIOLOGY", tone: "blue", description: "Described in preclinical research involving tissue biology, vascular signalling, and cellular pathways. Laboratory or animal findings do not establish safety or efficacy in people." },
+  { id: "cjc-ipamorelin", name: "CJC-1295 + Ipamorelin", alias: "Complementary peptide research", code: "PP–04", category: "metabolic", categoryLabel: "ENDOCRINE RESEARCH", tone: "ochre", description: "Distinct peptides investigated in relation to GHRH and ghrelin-receptor signalling. A combined product or fixed formulation must be confirmed by the supplier." },
+  { id: "semax-selank", name: "Semax + Selank", alias: "Neurobiological research", code: "PP–05", category: "neuro", categoryLabel: "NEUROBIOLOGY", tone: "lilac", description: "Distinct synthetic peptides discussed in research on neurobiological signalling. Evidence and regulatory status vary; no established product effect is implied." },
+  { id: "mots-c", name: "MOTS-c", alias: "Mitochondrial-derived peptide", code: "PP–06", category: "metabolic", categoryLabel: "METABOLIC RESEARCH", tone: "mint", description: "A peptide encoded in the mitochondrial 12S rRNA region. Research examines cellular energy sensing, metabolic signalling, and stress responses, largely in experimental models." }
 ];
+
+function loadProducts() {
+  try {
+    const stored = JSON.parse(localStorage.getItem("percy-products") || "null");
+    return Array.isArray(stored) ? stored : [...defaultProducts];
+  } catch { return [...defaultProducts]; }
+}
+
+function escapeHTML(value = "") {
+  return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+}
+
+let products = loadProducts();
+
+function applySiteContent() {
+  try {
+    const content = JSON.parse(localStorage.getItem("percy-site-content") || "null");
+    if (!content) return;
+    let migratedSeo = false;
+    if (content.pageTitle === "Percy Peptides | Research Compounds and Product Information") {
+      content.pageTitle = "Percy Peptides | Research Peptide Catalogue & Information";
+      migratedSeo = true;
+    }
+    if (content.metaDescription === "Explore Percy Peptides’ research catalogue, read clear compound information, and learn about product documentation and the enquiry process.") {
+      content.metaDescription = "Explore the Percy Peptides research catalogue, read compound information and research articles, and enquire about verified product details.";
+      migratedSeo = true;
+    }
+    if (migratedSeo) localStorage.setItem("percy-site-content", JSON.stringify(content));
+    if (content.pageTitle) document.title = content.pageTitle;
+    if (content.metaDescription) {
+      const description = document.querySelector('meta[name="description"]');
+      if (description) description.content = content.metaDescription;
+      const socialDescription = document.querySelector('meta[property="og:description"]');
+      if (socialDescription) socialDescription.content = content.metaDescription;
+      const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+      if (twitterDescription) twitterDescription.content = content.metaDescription;
+    }
+    if (content.keywords) {
+      const keywords = document.querySelector('meta[name="keywords"]');
+      if (keywords) keywords.content = content.keywords;
+    }
+    const socialTitle = document.querySelector('meta[property="og:title"]');
+    if (socialTitle && content.pageTitle) socialTitle.content = content.pageTitle;
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle && content.pageTitle) twitterTitle.content = content.pageTitle;
+    if (content.announcement) document.querySelector(".announcement").lastChild.textContent = ` ${content.announcement}`;
+    const heroTitle = document.querySelector(".hero h1");
+    if (content.heroTitleLead) heroTitle.firstChild.textContent = content.heroTitleLead;
+    if (content.heroTitleEmphasis) heroTitle.querySelector("span").textContent = content.heroTitleEmphasis;
+    if (content.heroDescription) document.querySelector(".hero__lede").textContent = content.heroDescription;
+    if (content.catalogueLead) document.querySelector(".section-heading__copy").textContent = content.catalogueLead;
+    if (content.contactEmail) document.querySelector(".contact-card__link").textContent = content.contactEmail;
+    if (content.disclaimer) document.querySelector(".footer-legal>p").textContent = content.disclaimer;
+    if (Array.isArray(content.articles)) {
+      document.querySelectorAll(".article-card").forEach((card, index) => {
+        const article = content.articles[index];
+        if (!article) return;
+        card.querySelector("h3").textContent = article.title;
+        card.querySelector("p").textContent = article.summary;
+      });
+    }
+  } catch { /* Ignore malformed local preview content. */ }
+}
 
 const productGrid = document.querySelector("#product-grid");
 const searchInput = document.querySelector("#product-search");
@@ -21,6 +84,7 @@ let activeFilter = "all";
 let cart = loadCart();
 let toastTimer;
 let lastFocusedElement;
+let enquiryReturnFocus;
 
 function loadCart() {
   try {
@@ -35,15 +99,15 @@ function saveCart() {
 
 function renderProducts() {
   const query = searchInput.value.trim().toLowerCase();
-  const visible = products.filter(product => (activeFilter === "all" || product.category === activeFilter) && `${product.name} ${product.alias} ${product.categoryLabel} ${product.description}`.toLowerCase().includes(query));
+  const visible = products.filter(product => product.active !== false && (activeFilter === "all" || product.category === activeFilter) && `${product.name} ${product.alias} ${product.categoryLabel} ${product.description}`.toLowerCase().includes(query));
   productGrid.innerHTML = visible.length ? visible.map((product, index) => `
-    <article class="product-card" data-tone="${product.tone}">
-      <div class="product-card__visual" aria-hidden="true"><span class="visual-code">${product.code}</span><span class="compound-orb"></span><span class="visual-index">PP / ${String(index + 1).padStart(2, "0")}</span></div>
+    <article class="product-card" data-tone="${escapeHTML(product.tone || "sage")}">
+      <div class="product-card__visual" aria-hidden="true"><span class="visual-code">${escapeHTML(product.code || "")}</span><span class="compound-orb"></span><span class="visual-index">PP / ${String(index + 1).padStart(2, "0")}</span></div>
       <div class="product-card__body">
-        <div class="product-card__meta"><span class="category-label">${product.categoryLabel}</span><span class="product-code">${product.code}</span></div>
-        <h3>${product.name}</h3><p class="product-card__alias">${product.alias}</p>
-        <p class="product-card__description">${product.description}</p>
-        <div class="product-card__footer"><div class="price-note">Price on enquiry<span>Availability confirmed by our team</span></div><button class="add-button" type="button" data-add="${product.id}" aria-label="Add ${product.name} to basket">Add to basket <span aria-hidden="true">+</span></button></div>
+        <div class="product-card__meta"><span class="category-label">${escapeHTML(product.categoryLabel || "RESEARCH")}</span><span class="product-code">${escapeHTML(product.code || "")}</span></div>
+        <h3>${escapeHTML(product.name)}</h3><p class="product-card__alias">${escapeHTML(product.alias || "")}</p>
+        <p class="product-card__description">${escapeHTML(product.description || "")}</p>
+        <div class="product-card__footer"><div class="price-note">${escapeHTML(product.price || "Price on enquiry")}<span>${product.availability === "unavailable" ? "Currently unavailable" : product.availability === "available" ? "Availability confirmed" : "Availability confirmed by our team"}</span></div><button class="add-button" type="button" data-add="${escapeHTML(product.id)}" aria-label="Add ${escapeHTML(product.name)} to basket" ${product.availability === "unavailable" ? "disabled" : ""}>${product.availability === "unavailable" ? "Unavailable" : "Add to basket"} <span aria-hidden="true">${product.availability === "unavailable" ? "–" : "+"}</span></button></div>
       </div>
     </article>`).join("") : `<div class="empty-results"><strong>No compounds found.</strong><p>Try another search or choose a different category.</p></div>`;
 }
@@ -55,10 +119,10 @@ function renderCart() {
   cartFooter.hidden = count === 0;
   cartItems.innerHTML = cart.map(line => {
     const product = products.find(item => item.id === line.id);
-    return `<article class="cart-line" data-tone="${product.tone}">
+    return `<article class="cart-line" data-tone="${escapeHTML(product?.tone || "sage")}">
       <div class="cart-line__swatch" aria-hidden="true"><span class="compound-orb"></span></div>
-      <div class="cart-line__info"><h3>${product.name}</h3><p>${product.categoryLabel}</p><div class="cart-line__qty" aria-label="Quantity for ${product.name}"><button class="qty-button" type="button" data-quantity="${product.id}" data-change="-1" aria-label="Remove one ${product.name}">−</button><span>${line.quantity}</span><button class="qty-button" type="button" data-quantity="${product.id}" data-change="1" aria-label="Add one ${product.name}">+</button></div></div>
-      <div class="cart-line__controls"><button class="remove-button" type="button" data-remove="${product.id}" aria-label="Remove ${product.name} from basket">Remove</button></div>
+      <div class="cart-line__info"><h3>${escapeHTML(product?.name || line.id)}</h3><p>${escapeHTML(product?.categoryLabel || "RESEARCH")}</p><div class="cart-line__qty" aria-label="Quantity for ${escapeHTML(product?.name || line.id)}"><button class="qty-button" type="button" data-quantity="${escapeHTML(product?.id || line.id)}" data-change="-1" aria-label="Remove one ${escapeHTML(product?.name || line.id)}">−</button><span>${line.quantity}</span><button class="qty-button" type="button" data-quantity="${escapeHTML(product?.id || line.id)}" data-change="1" aria-label="Add one ${escapeHTML(product?.name || line.id)}">+</button></div></div>
+      <div class="cart-line__controls"><button class="remove-button" type="button" data-remove="${escapeHTML(product?.id || line.id)}" aria-label="Remove ${escapeHTML(product?.name || line.id)} from basket">Remove</button></div>
     </article>`;
   }).join("");
 }
@@ -126,7 +190,43 @@ document.querySelector(".cart-browse").addEventListener("click", () => { closeCa
 document.querySelector(".checkout-button").addEventListener("click", () => {
   const lines = cart.map(line => `${products.find(product => product.id === line.id).name} × ${line.quantity}`).join("\n");
   const message = `Your enquiry selection:\n\n${lines}\n\nPlease confirm product availability, pricing and documentation before you proceed. Add Percy Peptides’ verified enquiry contact to publish a working order enquiry.`;
-  window.alert(message);
+  const enquiryDialog = document.querySelector("#enquiry-dialog");
+  enquiryReturnFocus = document.querySelector(".checkout-button");
+  enquiryDialog.querySelector(".enquiry-summary").textContent = message;
+  enquiryDialog.hidden = false;
+  requestAnimationFrame(() => enquiryDialog.querySelector("input[name='name']").focus());
+});
+
+const enquiryDialog = document.querySelector("#enquiry-dialog");
+function closeEnquiryDialog() {
+  enquiryDialog.hidden = true;
+  if (enquiryReturnFocus instanceof HTMLElement) enquiryReturnFocus.focus();
+}
+enquiryDialog.querySelector(".enquiry-close").addEventListener("click", closeEnquiryDialog);
+enquiryDialog.addEventListener("click", event => { if (event.target === enquiryDialog) closeEnquiryDialog(); });
+enquiryDialog.querySelector("form").addEventListener("submit", event => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const enquiry = {
+    id: `PP-${Date.now().toString(36).toUpperCase()}`,
+    createdAt: new Date().toISOString(),
+    status: "new",
+    customer: { name: String(form.get("name")).trim(), email: String(form.get("email")).trim(), organisation: String(form.get("organisation")).trim(), phone: String(form.get("phone")).trim() },
+    message: String(form.get("message")).trim(),
+    items: cart.map(line => ({ ...line, name: products.find(product => product.id === line.id)?.name || line.id }))
+  };
+  try {
+    const orders = JSON.parse(localStorage.getItem("percy-orders") || "[]");
+    orders.unshift(enquiry);
+    localStorage.setItem("percy-orders", JSON.stringify(orders));
+    cart = [];
+    saveCart(); renderCart();
+    enquiryDialog.hidden = true;
+    event.currentTarget.reset();
+    showToast("Your enquiry has been saved in this browser.");
+  } catch {
+    showToast("This browser could not save the enquiry. Please try again.");
+  }
 });
 
 const menuToggle = document.querySelector(".menu-toggle");
@@ -140,6 +240,13 @@ menuToggle.addEventListener("click", () => {
 mobileNav.addEventListener("click", event => { if (event.target.closest("a")) { menuToggle.setAttribute("aria-expanded", "false"); menuToggle.setAttribute("aria-label", "Open navigation"); mobileNav.hidden = true; } });
 document.addEventListener("keydown", event => {
   if (event.key === "Escape" && !cartPanel.hidden) closeCart();
+  if (event.key === "Escape" && !enquiryDialog.hidden) closeEnquiryDialog();
+  if (event.key === "Tab" && !enquiryDialog.hidden) {
+    const focusable = [...enquiryDialog.querySelectorAll('button:not(:disabled), a[href], input:not(:disabled), textarea:not(:disabled)')];
+    const first = focusable[0], last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
   if (event.key === "Tab" && !cartPanel.hidden) {
     const focusable = [...cartPanel.querySelectorAll('button:not(:disabled), a[href], input:not(:disabled), [tabindex]:not([tabindex="-1"])')].filter(element => !element.hidden);
     const first = focusable[0], last = focusable.at(-1);
@@ -150,3 +257,4 @@ document.addEventListener("keydown", event => {
 
 renderProducts();
 renderCart();
+applySiteContent();
